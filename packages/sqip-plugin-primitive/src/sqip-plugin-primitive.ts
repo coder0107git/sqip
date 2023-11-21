@@ -146,8 +146,9 @@ export default class PrimitivePlugin extends SqipPlugin {
       .toLowerCase()
 
     const result = await execa(
-      primitiveExecutable,
+      "wasmtime", // primitiveExecutable,
       [
+        primitiveExecutable,
         '-i',
         '-',
         '-o',
@@ -186,19 +187,24 @@ export default class PrimitivePlugin extends SqipPlugin {
 
   // Sanity check: use the exit state of 'type' to check for Primitive availability
   async checkForPrimitive(): Promise<undefined> {
-    const platform = os.platform()
+    const platform: string = "unknown";//os.platform()
     const primitivePath = path.join(
       VENDOR_DIR,
-      `primitive-${platform}-${os.arch()}${platform === 'win32' ? '.exe' : ''}`
+      `primitive-${platform}-${/*os.arch()*/"wasi"}${platform === 'win32' ? '.exe' : platform === "unknown" ? '.wasm' : ''}`
     )
 
+    console.log("ZEE", primitivePath)
+
     try {
-      await access(primitivePath, constants.X_OK)
-      debug(`Found primitive binary at ${primitivePath}`)
+      console.log(1)
+      await access(primitivePath, constants.X_OK); console.log(2)
+      /*debug*/console.log(3, "debug", `Found primitive binary at ${primitivePath}`)
       primitiveExecutable = primitivePath
+      console.log(4)
       return
-    } catch (e) {
+    } catch (e: any) {
       // noop
+      console.warn("AHHHHHH! -", e.message, e)
     }
 
     // Test if primitive is available as global executable

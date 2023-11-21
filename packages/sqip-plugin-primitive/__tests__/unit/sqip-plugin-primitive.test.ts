@@ -26,7 +26,7 @@ mockedExeca.mockImplementation(() => {
 const mockedFsAccess = fs.access as jest.MockedFunction<typeof fs.access>
 
 mockedFsAccess.mockImplementation(async () =>
-  Promise.reject(new Error('Mocked: Binary not available'))
+  Promise.resolve(console.log("Strange 🤔"))//Promise.reject(new Error('Mocked: Binary not available'))
 )
 const mockedOsArch = os.arch as jest.MockedFunction<typeof os.arch>
 const mockedOsPlatform = os.platform as jest.MockedFunction<typeof os.platform>

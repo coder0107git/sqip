@@ -1,0 +1,8 @@
+{
+    "go.toolsEnvVars": {
+        "GOOS": "js",
+        "GOARCH": "wasm",
+        "GOROOT": "/home/gitpod/.cache/tinygo/goroot-cb480d6a8228cb09ffd735b911efdbbed20c514e46506ba26a7c3f818f44eab8",
+        "GOFLAGS": "-tags=tinygo.wasm,tinygo,math_big_pure_go,gc.conservative,scheduler.asyncify,serial.none"
+    }
+}
