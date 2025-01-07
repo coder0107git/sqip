@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primitive Online WASM Test</title>
+</head>
+<body>
+    <label for="mode">Mode: </label>
+    <input id="mode" type="text" inputmode="numeric" pattern="\d*" value="1" />
+
+    <label for="primitiveNum">Number of Primitives: </label>
+    <input id="primitiveNum" type="text" inputmode="numeric" pattern="\d*" value="50" />
+
+    <label for="file">Image:</label>
+    <input id="file" type="file" accept="image/*" />
+
+    <script src="https://cdn.jsdelivr.net/gh/gh-canon/stack-snippet-console@master/console.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/node-vibrant@3.2.1-alpha.1/dist/vibrant.min.js"></script>
+    <script src="./wasm_exec.js"></script>
+    <script type="module">
+        const mode = document.querySelector("#mode");
+        const primitiveNum = document.querySelector("#primitiveNum");
+        const fileInput = document.querySelector("#file");
+        
+        const go = new Go();
+
+        // The following is from https://www.arp242.net/wasm-cli.html
+        let outputBuf = '';
+        const decoder = new TextDecoder("utf-8");
+        globalThis.fs.writeSync = function(fd, buf) {
+            outputBuf += decoder.decode(buf);
+            const nl = outputBuf.lastIndexOf("\n");
+            if (nl != -1) {
+                window.output.innerText += outputBuf.substr(0, nl + 1);
+                window.scrollTo(0, document.body.scrollHeight);
+                outputBuf = outputBuf.substr(nl + 1);
+            }
+            return buf.length;
+        };
+
+
+        let { module: mod, instance: inst } = await WebAssembly.instantiateStreaming(
+            fetch("./primitive-binaries/primitive-js-wasm-beta.wasm"), 
+            go.importObject
+        );
+        
+        fileInput.oninput = async ({ target: { files: [file] } } = { files: [] }) => {
+            const to_s = val => new String(val).toString();
+            const { width, height } = await createImageBitmap(file);
+            const rep = 0;
+            const alpha = 128;
+            const userBg = "DarkMuted";
+            let buffer = URL.createObjectURL(file)
+            const palette = await (async () => {
+                const getPalette = buffer =>
+                    Vibrant.from(buffer).quality(0).getPalette()
+                try {
+                    return await getPalette(buffer)
+                } catch(e) {
+                    throw new Error("Could not get image pallete.", e)
+                    //return getPalette(await sharp(buffer).tiff().toBuffer())
+                }
+            })()
+            const parseColor = ({ palette, color }) => palette[color]?.hex || color;
+            const bg = to_s(
+                userBg ? parseColor({ color: userBg, palette }) : palette["Muted"]?.hex
+            )
+                .replace("#", "")
+                .toLowerCase()
+            const cores = 0;
+
+            console.log(file);
+
+            function fileToBase64DataUrl(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = Object.assign(new FileReader(), {
+                        onload: () => resolve(reader.result),
+                        onerror: () => reject(reader.error),
+                    });
+
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            const base64 = (await fileToBase64DataUrl(file)).replace(/data:image\/.*;base64,/, "")
+            console.log(base64)
+
+            go.argv = [
+                'primitive', // Program name; this can be anything
+                '-i',
+                'env_var_base64',//base64,//buffer,//'-',
+                '-o',
+                '-',
+                '-n',
+                to_s(primitiveNum.value),
+                '-m',
+                to_s(mode.value),
+                '-s',
+                to_s(Math.max(width, height)),
+                '-rep',
+                to_s(rep),
+                '-a',
+                to_s(alpha),
+                '-bg',
+                bg,
+                '-j',
+                to_s(cores),
+                '-vv'
+            ]
+            go.env.IMAGE = base64;
+
+            console.log("Running...", go.argv, go.env)
+            await go.run(inst);
+            console.log("Ran")
+
+            inst = await WebAssembly.instantiate(mod, go.importObject);
+        }
+        
+        //go.run(result.instance);
+    </script>
+</body>
+</html>
