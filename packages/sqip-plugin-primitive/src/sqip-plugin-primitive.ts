@@ -3,7 +3,7 @@ import { constants } from 'fs'
 import path from 'path'
 import os from 'os'
 import sharp from 'sharp'
-import * as svgson from 'svgson'
+import { loadSVG } from 'sqip'
 
 import execa from 'execa'
 import Debug from 'debug'
@@ -28,11 +28,13 @@ interface PrimitiveOptions extends PluginOptions {
   alpha?: number
   background?: string
   cores?: number
+  removeBackgroundElement?: boolean
 }
 
 const debug = Debug('sqip-plugin-primitive')
 
 const VENDOR_DIR = path.resolve(__dirname, '..', 'primitive-binaries')
+
 let primitiveExecutable = 'primitive'
 
 // Since Primitive is only interested in the larger dimension of the input image, let's find it
@@ -89,13 +91,20 @@ export default class PrimitivePlugin extends SqipPlugin {
         type: String,
         description:
           'starting background color. Either the name of a color from the color palette or a 6 digit hex value for solid color and a 8 digit hex value for transparency: ffffff00',
-        defaultValue: 'DarkMuted'
+        defaultValue: 'Muted'
       },
       {
         name: 'cores',
         type: Number,
         description: 'number of parallel workers (default uses all cores)',
         defaultValue: 0
+      },
+      {
+        name: 'removeBackgroundElement',
+        type: Boolean,
+        description:
+          'Should we keep the background element created by primitive? Disable this when you combine the primitive plugin with the blur plugin.',
+        defaultValue: false
       }
     ]
   }
@@ -109,8 +118,9 @@ export default class PrimitivePlugin extends SqipPlugin {
       mode: 0,
       rep: 0,
       alpha: 128,
-      background: 'DarkMuted',
+      background: 'Muted',
       cores: 0,
+      removeBackgroundElement: false,
       ...pluginOptions
     }
   }
@@ -134,7 +144,8 @@ export default class PrimitivePlugin extends SqipPlugin {
       rep,
       alpha,
       background: userBg,
-      cores
+      cores,
+      removeBackgroundElement
     } = this.options
 
     const { width, height, palette } = metadata
@@ -173,16 +184,25 @@ export default class PrimitivePlugin extends SqipPlugin {
       }
     )
 
-    metadata.type = 'svg'
+    const { svg: canvas } = await loadSVG(result.stdout)
 
-    // Hide background rectangle/path when using transparent backgrounds
-    if (bg.match(/[0-9a-f]{6}00/)) {
-      const parsedSvg = await svgson.parse(result.stdout)
-      delete parsedSvg.children[0]
-      return Buffer.from(svgson.stringify(parsedSvg))
+    const bgRect = canvas.findOne('rect[fill]')
+
+    if (bgRect) {
+      if (removeBackgroundElement || bg.match(/[0-9a-f]{6}00/)) {
+        // Remove background rectangle when using full transparent background
+        bgRect.remove()
+      } else {
+        // Optimize Background Rectangle for compression & responsiveness
+        bgRect.attr('width', '100%')
+        bgRect.attr('height', '100%')
+      }
     }
 
-    return Buffer.from(result.stdout)
+    metadata.type = 'svg'
+    metadata.mimeType = 'image/svg'
+
+    return Buffer.from(canvas.svg())
   }
 
   // Sanity check: use the exit state of 'type' to check for Primitive availability

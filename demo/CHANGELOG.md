@@ -3,6 +3,108 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0-alpha.55](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.54...sqip-demo@1.0.0-alpha.55) (2024-03-28)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.54](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.53...sqip-demo@1.0.0-alpha.54) (2024-03-22)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.53](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.52...sqip-demo@1.0.0-alpha.53) (2024-03-22)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.52](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.51...sqip-demo@1.0.0-alpha.52) (2024-03-22)
+
+
+### Bug Fixes
+
+* BREAKING - up minimum node version to 18.12.1 and configure typescript to output for that node version ([f1e051f](http://axe312ger.github.io/sqip/commit/f1e051f4962e094308116a9bbf47f063abf7dc8b))
+
+
+
+
+
+# [1.0.0-alpha.51](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.50...sqip-demo@1.0.0-alpha.51) (2024-03-22)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.50](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.49...sqip-demo@1.0.0-alpha.50) (2024-03-22)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.49](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.48...sqip-demo@1.0.0-alpha.49) (2024-03-21)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.48](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.47...sqip-demo@1.0.0-alpha.48) (2024-03-02)
+
+**Note:** Version bump only for package sqip-demo
+
+
+
+
+
+# [1.0.0-alpha.47](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.46...sqip-demo@1.0.0-alpha.47) (2024-02-24)
+
+
+### Bug Fixes
+
+* show average processing time in demo in ms ([84bb989](http://axe312ger.github.io/sqip/commit/84bb989b618ddddc8a3fe12162f6fb4763c24637))
+* **deps:** update dependency aspect-ratio to v2.1.5 ([dd9915b](http://axe312ger.github.io/sqip/commit/dd9915b4848616375554580888b7884b1a3ea426))
+* **deps:** update dependency sharp to v0.32.6 [security] ([04c3395](http://axe312ger.github.io/sqip/commit/04c3395b131ffd1fcec67df12d4a98ca0c0c4295))
+
+
+### Features
+
+* add info about generating machine and turn into improve css a little ([2365329](http://axe312ger.github.io/sqip/commit/23653296790a37b06b4545d0620abd6d2f876e11))
+* add triangle plugin and include filename and mime type into metadata ([f8838de](http://axe312ger.github.io/sqip/commit/f8838dead30932e59bc5f00cb2e2e9e20bf70a40))
+* new blurhash plugin ([c147d05](http://axe312ger.github.io/sqip/commit/c147d050a8f99663324d3e67da5e7d65f0e2c960))
+
+
+
+
+
+# [1.0.0-alpha.46](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.45...sqip-demo@1.0.0-alpha.46) (2024-01-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency aspect-ratio to v2.1.3 ([97a0134](http://axe312ger.github.io/sqip/commit/97a0134c4bd0f473153e7cf02fa42d15cc88b283))
+* **deps:** update dependency aspect-ratio to v2.1.4 ([77cda20](http://axe312ger.github.io/sqip/commit/77cda2010e8919619cdf8cbc6611a47dfe0d728b))
+* **deps:** update dependency pretty-bytes to v6.1.1 ([7b3907f](http://axe312ger.github.io/sqip/commit/7b3907f0086dc16a2fadf4ebaa8aa4a94cd3be41))
+* **deps:** update dependency sharp to v0.32.0 ([a039471](http://axe312ger.github.io/sqip/commit/a039471f2268ae2acf044a1894d9144595b55253))
+* **deps:** update dependency sharp to v0.32.6 ([88c2c41](http://axe312ger.github.io/sqip/commit/88c2c41cb47dce811a148b4d3c788de3d4a4d36d))
+
+
+
+
+
 # [1.0.0-alpha.45](http://axe312ger.github.io/sqip/compare/sqip-demo@1.0.0-alpha.44...sqip-demo@1.0.0-alpha.45) (2023-04-06)
 
 **Note:** Version bump only for package sqip-demo
